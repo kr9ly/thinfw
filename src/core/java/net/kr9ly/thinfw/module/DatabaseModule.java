@@ -2,13 +2,13 @@ package net.kr9ly.thinfw.module;
 
 import com.google.inject.AbstractModule;
 import com.iciql.Db;
-import com.zaxxer.hikari.HikariDataSource;
 import net.kr9ly.thinfw.guice.annotation.ApplicationScoped;
 import net.kr9ly.thinfw.guice.annotation.RequestScoped;
 import net.kr9ly.thinfw.provider.database.ConnectionProvider;
 import net.kr9ly.thinfw.provider.database.HikariDataSourceProvider;
 import net.kr9ly.thinfw.provider.database.IciqlDbProvider;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 
 /**
@@ -30,7 +30,7 @@ public class DatabaseModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        bind(HikariDataSource.class).toProvider(HikariDataSourceProvider.class).in(ApplicationScoped.class);
+        bind(DataSource.class).toProvider(HikariDataSourceProvider.class).in(ApplicationScoped.class);
         bind(Connection.class).toProvider(ConnectionProvider.class).in(RequestScoped.class);
         bind(Db.class).toProvider(IciqlDbProvider.class).in(RequestScoped.class);
     }

@@ -2,8 +2,8 @@ package net.kr9ly.thinfw.provider.database;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.zaxxer.hikari.HikariDataSource;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -25,7 +25,7 @@ import java.sql.SQLException;
 public class ConnectionProvider implements Provider<Connection> {
 
     @Inject
-    HikariDataSource ds;
+    DataSource ds;
 
     @Override
     public Connection get() {
