@@ -1,11 +1,8 @@
-package net.kr9ly.thinfw.provider.database;
+package net.kr9ly.thinfw.dagger.module;
 
-import com.google.inject.Inject;
-import com.google.inject.Provider;
-import com.iciql.Db;
-import com.zaxxer.hikari.HikariDataSource;
-
-import java.sql.Connection;
+import dagger.Module;
+import dagger.Provides;
+import spark.Request;
 
 /**
  * Copyright 2015 kr9ly
@@ -22,13 +19,17 @@ import java.sql.Connection;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-public class IciqlDbProvider implements Provider<Db> {
+@Module
+public class RequestModule {
 
-    @Inject
-    Connection connection;
+    private Request request;
 
-    @Override
-    public Db get() {
-        return Db.open(connection);
+    public RequestModule(Request request) {
+        this.request = request;
+    }
+
+    @Provides
+    Request request() {
+        return request;
     }
 }

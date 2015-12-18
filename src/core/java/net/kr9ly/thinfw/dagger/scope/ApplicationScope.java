@@ -1,4 +1,8 @@
-package net.kr9ly.thinfw.service;
+package net.kr9ly.thinfw.dagger.scope;
+
+import javax.inject.Scope;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
 /**
  * Copyright 2015 kr9ly
@@ -15,11 +19,7 @@ package net.kr9ly.thinfw.service;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-public class SampleService {
-
-    private double random = Math.random();
-
-    public void test() {
-        System.out.println(random);
-    }
+@Scope
+@Retention(RetentionPolicy.RUNTIME)
+public @interface ApplicationScope {
 }

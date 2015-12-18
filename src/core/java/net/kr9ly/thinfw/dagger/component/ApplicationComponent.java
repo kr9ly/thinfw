@@ -1,11 +1,11 @@
-package net.kr9ly.thinfw.provider.database;
+package net.kr9ly.thinfw.dagger.component;
 
-import com.google.inject.Inject;
-import com.google.inject.Provider;
-
-import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.SQLException;
+import dagger.Component;
+import net.kr9ly.dagger.module.DatabaseEnvionmentModule;
+import net.kr9ly.dagger.module.DatabaseEnvionmentModuleSupport;
+import net.kr9ly.thinfw.dagger.module.DatabaseModule;
+import net.kr9ly.thinfw.dagger.module.DatabaseModuleSupport;
+import net.kr9ly.thinfw.dagger.scope.ApplicationScope;
 
 /**
  * Copyright 2015 kr9ly
@@ -22,17 +22,7 @@ import java.sql.SQLException;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-public class ConnectionProvider implements Provider<Connection> {
-
-    @Inject
-    DataSource ds;
-
-    @Override
-    public Connection get() {
-        try {
-            return ds.getConnection();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
+@ApplicationScope
+@Component(modules = {DatabaseModule.class, DatabaseEnvionmentModule.class})
+public interface ApplicationComponent extends DatabaseModuleSupport, DatabaseEnvionmentModuleSupport {
 }

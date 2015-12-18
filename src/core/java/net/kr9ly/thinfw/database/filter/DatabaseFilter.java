@@ -24,8 +24,6 @@ import java.sql.Connection;
 public class DatabaseFilter {
 
     public static void close(Request request, Response response) throws Exception {
-        if (Di.isProvidedOn(request, Connection.class)) {
-            Di.require(request, Connection.class).close();
-        }
+        Di.getComponent(request).connection().close();
     }
 }

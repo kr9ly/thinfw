@@ -1,9 +1,11 @@
-package net.kr9ly.thinfw.module;
+package net.kr9ly.dagger.module;
 
-import com.google.inject.AbstractModule;
-import net.kr9ly.thinfw.guice.annotation.RequestScoped;
-import net.kr9ly.thinfw.provider.service.SampleServiceProvider;
-import net.kr9ly.thinfw.service.SampleService;
+import dagger.Module;
+import dagger.Provides;
+import net.kr9ly.thinfw.dagger.scope.ApplicationScope;
+import org.jooq.SQLDialect;
+import org.jooq.conf.Settings;
+import org.jooq.conf.SettingsTools;
 
 /**
  * Copyright 2015 kr9ly
@@ -20,10 +22,19 @@ import net.kr9ly.thinfw.service.SampleService;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-public class ServicesModule extends AbstractModule {
+@Module
+public class DatabaseEnvionmentModule {
 
-    @Override
-    protected void configure() {
-        bind(SampleService.class).toProvider(SampleServiceProvider.class).in(RequestScoped.class);
+    @ApplicationScope
+    @Provides
+    SQLDialect sqlDialect() {
+        return SQLDialect.MARIADB;
+    }
+
+    @ApplicationScope
+    @Provides
+    Settings settings() {
+        return SettingsTools
+                .defaultSettings();
     }
 }

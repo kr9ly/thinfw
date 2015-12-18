@@ -1,12 +1,10 @@
-package net.kr9ly.thinfw.guice.filter;
+package net.kr9ly.thinfw.dagger.filter;
 
-import com.google.common.collect.Lists;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.Module;
-import net.kr9ly.thinfw.Di;
-import net.kr9ly.thinfw.guice.module.ApplicationScopeModule;
-import net.kr9ly.thinfw.guice.module.RequestScopeModule;
+import net.kr9ly.thinfw.dagger.component.ApplicationComponent;
+import net.kr9ly.thinfw.dagger.component.DaggerRequestComponent;
+import net.kr9ly.thinfw.dagger.module.ConnectionModule;
+import net.kr9ly.thinfw.dagger.module.JooqModule;
+import net.kr9ly.thinfw.dagger.module.RequestModule;
 import spark.Filter;
 import spark.Request;
 import spark.Response;
@@ -30,18 +28,21 @@ public class DependencyFilter implements Filter {
 
     public static final String DEPENDENCY_INJECTOR_ATTRIBUTE = "DEPENDENCY_INJECTOR_ATTRIBUTE";
 
-    private static final Injector globalInjector = Guice.createInjector(new ApplicationScopeModule());
+    private final ApplicationComponent applicationComponent;
 
-    private final Iterable<Module> modules;
-
-    public DependencyFilter(Module... modules) {
-        this.modules = Lists.asList(new RequestScopeModule(), modules);
+    public DependencyFilter(ApplicationComponent applicationComponent) {
+        this.applicationComponent = applicationComponent;
     }
 
     @Override
     public void handle(Request request, Response response) throws Exception {
         request.attribute(DEPENDENCY_INJECTOR_ATTRIBUTE,
-                globalInjector.createChildInjector(modules)
+                DaggerRequestComponent.builder()
+                        .applicationComponent(applicationComponent)
+                        .requestModule(new RequestModule(request))
+                        .connectionModule(new ConnectionModule())
+                        .jooqModule(new JooqModule())
+                        .build()
         );
     }
 }

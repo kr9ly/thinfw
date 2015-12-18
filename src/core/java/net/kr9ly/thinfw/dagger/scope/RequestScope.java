@@ -1,13 +1,8 @@
-package net.kr9ly.thinfw.guice.annotation;
+package net.kr9ly.thinfw.dagger.scope;
 
-import com.google.inject.ScopeAnnotation;
-
+import javax.inject.Scope;
 import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
-
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.ElementType.TYPE;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import java.lang.annotation.RetentionPolicy;
 
 /**
  * Copyright 2015 kr9ly
@@ -24,8 +19,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@Target({TYPE, METHOD})
-@Retention(RUNTIME)
-@ScopeAnnotation
-public @interface ApplicationScoped {
+@Scope
+@Retention(RetentionPolicy.RUNTIME)
+public @interface RequestScope {
 }

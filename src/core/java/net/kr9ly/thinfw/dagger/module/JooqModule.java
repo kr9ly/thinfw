@@ -1,8 +1,14 @@
-package net.kr9ly.thinfw.guice.module;
+package net.kr9ly.thinfw.dagger.module;
 
-import com.google.inject.AbstractModule;
-import net.kr9ly.thinfw.guice.annotation.RequestScoped;
-import net.kr9ly.thinfw.guice.scope.RequestScope;
+import dagger.Module;
+import dagger.Provides;
+import org.jooq.DSLContext;
+import org.jooq.SQLDialect;
+import org.jooq.conf.Settings;
+
+import java.sql.Connection;
+
+import static org.jooq.impl.DSL.*;
 
 /**
  * Copyright 2015 kr9ly
@@ -19,10 +25,11 @@ import net.kr9ly.thinfw.guice.scope.RequestScope;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-public class RequestScopeModule extends AbstractModule {
+@Module
+public class JooqModule {
 
-    @Override
-    protected void configure() {
-        bindScope(RequestScoped.class, new RequestScope());
+    @Provides
+    DSLContext dslContext(Connection connection, SQLDialect dialect, Settings settings) {
+        return using(connection, dialect, settings);
     }
 }

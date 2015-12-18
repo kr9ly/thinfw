@@ -1,8 +1,12 @@
-package net.kr9ly.thinfw.provider.service;
+package net.kr9ly.thinfw.dagger.module;
 
-import com.google.inject.Provider;
-import net.kr9ly.thinfw.service.SampleService;
+import dagger.Module;
+import dagger.Provides;
+import net.kr9ly.thinfw.dagger.scope.RequestScope;
 
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 /**
  * Copyright 2015 kr9ly
@@ -19,10 +23,16 @@ import net.kr9ly.thinfw.service.SampleService;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-public class SampleServiceProvider implements Provider<SampleService> {
+@Module
+public class ConnectionModule {
 
-    @Override
-    public SampleService get() {
-        return new SampleService();
+    @Provides
+    @RequestScope
+    Connection connection(DataSource ds) {
+        try {
+            return ds.getConnection();
+        } catch (SQLException e) {
+            return null;
+        }
     }
 }

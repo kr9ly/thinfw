@@ -1,7 +1,5 @@
 package net.kr9ly.thinfw.controller;
 
-import net.kr9ly.thinfw.Di;
-import net.kr9ly.thinfw.service.SampleService;
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
@@ -24,8 +22,6 @@ import spark.Response;
 public class Index {
 
     public static ModelAndView index(Request request, Response response) {
-        Di.require(request, SampleService.class).test();
-        Di.require(request, SampleService.class).test();
         return new ModelAndView(null, "template/index.pebble");
     }
 }

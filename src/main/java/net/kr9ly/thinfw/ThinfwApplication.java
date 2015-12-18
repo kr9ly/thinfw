@@ -2,10 +2,11 @@ package net.kr9ly.thinfw;
 
 import net.kr9ly.thinfw.controller.Index;
 import net.kr9ly.thinfw.controller.Session;
+import net.kr9ly.thinfw.dagger.component.ApplicationComponent;
+import net.kr9ly.thinfw.dagger.component.DaggerApplicationComponent;
+import net.kr9ly.thinfw.dagger.filter.DependencyFilter;
+import net.kr9ly.thinfw.dagger.module.DatabaseModule;
 import net.kr9ly.thinfw.database.filter.DatabaseFilter;
-import net.kr9ly.thinfw.guice.filter.DependencyFilter;
-import net.kr9ly.thinfw.module.DatabaseModule;
-import net.kr9ly.thinfw.module.ServicesModule;
 import spark.servlet.SparkApplication;
 import spark.template.pebble.PebbleTemplateEngine;
 
@@ -28,12 +29,15 @@ import static spark.Spark.*;
  */
 public class ThinfwApplication implements SparkApplication {
 
+    private ApplicationComponent applicationComponent
+            = DaggerApplicationComponent
+            .builder()
+            .databaseModule(new DatabaseModule())
+            .build();
+
     @Override
     public void init() {
-        before(new DependencyFilter(
-                new ServicesModule(),
-                new DatabaseModule()
-        ));
+        before(new DependencyFilter(applicationComponent));
         after(DatabaseFilter::close);
 
         PebbleTemplateEngine pebble = new PebbleTemplateEngine();

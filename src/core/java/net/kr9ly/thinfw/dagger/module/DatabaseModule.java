@@ -1,12 +1,15 @@
-package net.kr9ly.thinfw.provider.database;
+package net.kr9ly.thinfw.dagger.module;
 
-import com.google.inject.Provider;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import com.typesafe.config.ConfigValue;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import dagger.Module;
+import dagger.Provides;
+import net.kr9ly.thinfw.dagger.scope.ApplicationScope;
 
+import javax.sql.DataSource;
 import java.util.Map;
 
 /**
@@ -24,10 +27,12 @@ import java.util.Map;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-public class HikariDataSourceProvider implements Provider<HikariDataSource> {
+@Module
+public class DatabaseModule {
 
-    @Override
-    public HikariDataSource get() {
+    @Provides
+    @ApplicationScope
+    DataSource dataSource() {
         Config dbConf = ConfigFactory.load().getConfig("db");
         HikariConfig config = new HikariConfig();
         config.setDriverClassName(dbConf.getString("driver"));

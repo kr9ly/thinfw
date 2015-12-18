@@ -1,9 +1,7 @@
 package net.kr9ly.thinfw;
 
-import com.google.inject.Injector;
-import net.kr9ly.thinfw.guice.annotation.RequestScoped;
-import net.kr9ly.thinfw.guice.filter.DependencyFilter;
-import net.kr9ly.thinfw.guice.scope.RequestScope;
+import net.kr9ly.thinfw.dagger.component.RequestComponent;
+import net.kr9ly.thinfw.dagger.filter.DependencyFilter;
 import spark.Request;
 
 /**
@@ -23,11 +21,7 @@ import spark.Request;
  */
 public class Di {
 
-    public static <T> T require(Request request, Class<T> clazz) {
-        return ((Injector) request.attribute(DependencyFilter.DEPENDENCY_INJECTOR_ATTRIBUTE)).getInstance(clazz);
-    }
-
-    public static boolean isProvidedOn(Request request, Class<?> clazz) {
-        return ((RequestScope) ((Injector) request.attribute(DependencyFilter.DEPENDENCY_INJECTOR_ATTRIBUTE)).getScopeBindings().get(RequestScoped.class)).isProvided(clazz);
+    public static RequestComponent getComponent(Request request) {
+        return request.attribute(DependencyFilter.DEPENDENCY_INJECTOR_ATTRIBUTE);
     }
 }
