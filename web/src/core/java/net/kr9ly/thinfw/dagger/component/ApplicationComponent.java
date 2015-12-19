@@ -2,10 +2,15 @@ package net.kr9ly.thinfw.dagger.component;
 
 import dagger.Component;
 import net.kr9ly.dagger.module.DatabaseEnvionmentModule;
-import net.kr9ly.dagger.module.DatabaseEnvionmentModuleSupport;
+import net.kr9ly.thinfw.dagger.module.AppSecurityManagerModule;
 import net.kr9ly.thinfw.dagger.module.DatabaseModule;
-import net.kr9ly.thinfw.dagger.module.DatabaseModuleSupport;
+import net.kr9ly.thinfw.dagger.module.SecurityModule;
 import net.kr9ly.thinfw.dagger.scope.ApplicationScope;
+import org.apache.shiro.mgt.SecurityManager;
+import org.jooq.SQLDialect;
+import org.jooq.conf.Settings;
+
+import javax.sql.DataSource;
 
 /**
  * Copyright 2015 kr9ly
@@ -23,6 +28,19 @@ import net.kr9ly.thinfw.dagger.scope.ApplicationScope;
  * limitations under the License.
  */
 @ApplicationScope
-@Component(modules = {DatabaseModule.class, DatabaseEnvionmentModule.class})
-public interface ApplicationComponent extends DatabaseModuleSupport, DatabaseEnvionmentModuleSupport {
+@Component(modules = {
+        DatabaseModule.class,
+        DatabaseEnvionmentModule.class,
+        SecurityModule.class,
+        AppSecurityManagerModule.class
+})
+public interface ApplicationComponent {
+
+    SQLDialect sqlDialect();
+
+    Settings settings();
+
+    DataSource dataSource();
+
+    SecurityManager securityManager();
 }

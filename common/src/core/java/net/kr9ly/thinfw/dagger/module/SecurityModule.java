@@ -1,11 +1,13 @@
-package net.kr9ly.dagger.module;
+package net.kr9ly.thinfw.dagger.module;
 
 import dagger.Module;
 import dagger.Provides;
 import net.kr9ly.thinfw.dagger.scope.ApplicationScope;
-import org.jooq.SQLDialect;
-import org.jooq.conf.Settings;
-import org.jooq.conf.SettingsTools;
+import net.kr9ly.thinfw.shiro.realms.RealmSet;
+import org.apache.shiro.cache.CacheManager;
+import org.apache.shiro.mgt.DefaultSecurityManager;
+import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.session.mgt.SessionManager;
 
 /**
  * Copyright 2015 kr9ly
@@ -23,18 +25,13 @@ import org.jooq.conf.SettingsTools;
  * limitations under the License.
  */
 @Module
-public class DatabaseEnvionmentModule {
+public class SecurityModule {
 
     @ApplicationScope
     @Provides
-    SQLDialect sqlDialect() {
-        return SQLDialect.MARIADB;
-    }
-
-    @ApplicationScope
-    @Provides
-    Settings settings() {
-        return new Settings()
-                .withExecuteLogging(true);
+    SecurityManager securityManager(RealmSet realmSet, SessionManager sessionManager) {
+        DefaultSecurityManager securityManager = new DefaultSecurityManager(realmSet);
+        securityManager.setSessionManager(sessionManager);
+        return securityManager;
     }
 }

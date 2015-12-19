@@ -1,11 +1,11 @@
-package net.kr9ly.dagger.module;
+package net.kr9ly.thinfw.immutables;
 
-import dagger.Module;
-import dagger.Provides;
-import net.kr9ly.thinfw.dagger.scope.ApplicationScope;
-import org.jooq.SQLDialect;
-import org.jooq.conf.Settings;
-import org.jooq.conf.SettingsTools;
+import org.immutables.value.Value;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * Copyright 2015 kr9ly
@@ -22,19 +22,12 @@ import org.jooq.conf.SettingsTools;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@Module
-public class DatabaseEnvionmentModule {
-
-    @ApplicationScope
-    @Provides
-    SQLDialect sqlDialect() {
-        return SQLDialect.MARIADB;
-    }
-
-    @ApplicationScope
-    @Provides
-    Settings settings() {
-        return new Settings()
-                .withExecuteLogging(true);
-    }
+@Target({ElementType.PACKAGE, ElementType.TYPE})
+@Retention(RetentionPolicy.CLASS)
+@Value.Style(
+        get = {"is*", "get*"},
+        init = "set*",
+        visibility = Value.Style.ImplementationVisibility.PUBLIC
+)
+public @interface DbEntity {
 }

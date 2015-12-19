@@ -1,0 +1,17 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+ext {
+    envSrcDir = file("${projectDir}/src/${buildEnv}/java")
+    envResourcesDir = file("${projectDir}/src/${buildEnv}/resources")
+}
+
+sourceSets {
+    main {
+        java.srcDirs += envSrcDir
+        resources.srcDirs += envResourcesDir
+    }
+}

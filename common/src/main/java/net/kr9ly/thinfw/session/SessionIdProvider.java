@@ -1,11 +1,4 @@
-package net.kr9ly.dagger.module;
-
-import dagger.Module;
-import dagger.Provides;
-import net.kr9ly.thinfw.dagger.scope.ApplicationScope;
-import org.jooq.SQLDialect;
-import org.jooq.conf.Settings;
-import org.jooq.conf.SettingsTools;
+package net.kr9ly.thinfw.session;
 
 /**
  * Copyright 2015 kr9ly
@@ -22,19 +15,6 @@ import org.jooq.conf.SettingsTools;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@Module
-public class DatabaseEnvionmentModule {
-
-    @ApplicationScope
-    @Provides
-    SQLDialect sqlDialect() {
-        return SQLDialect.MARIADB;
-    }
-
-    @ApplicationScope
-    @Provides
-    Settings settings() {
-        return new Settings()
-                .withExecuteLogging(true);
-    }
+public interface SessionIdProvider {
+    String getSessionId();
 }

@@ -1,11 +1,8 @@
-package net.kr9ly.dagger.module;
+package net.kr9ly.thinfw.session;
 
-import dagger.Module;
-import dagger.Provides;
-import net.kr9ly.thinfw.dagger.scope.ApplicationScope;
-import org.jooq.SQLDialect;
-import org.jooq.conf.Settings;
-import org.jooq.conf.SettingsTools;
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
+import spark.Request;
 
 /**
  * Copyright 2015 kr9ly
@@ -22,19 +19,17 @@ import org.jooq.conf.SettingsTools;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@Module
-public class DatabaseEnvionmentModule {
+public class RequestSessionIdProvider implements SessionIdProvider {
 
-    @ApplicationScope
-    @Provides
-    SQLDialect sqlDialect() {
-        return SQLDialect.MARIADB;
+    private Request request;
+
+    public RequestSessionIdProvider(Request request) {
+        this.request = request;
     }
 
-    @ApplicationScope
-    @Provides
-    Settings settings() {
-        return new Settings()
-                .withExecuteLogging(true);
+    @Override
+    public String getSessionId() {
+        Config sessionConf = ConfigFactory.load().getConfig("session");
+        return request.cookie(sessionConf.getString("cookieKey"));
     }
 }

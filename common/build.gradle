@@ -1,3 +1,6 @@
+import org.jooq.util.GenerationTool
+import javax.xml.bind.JAXB
+
 buildscript {
     repositories {
         jcenter()
@@ -6,6 +9,8 @@ buildscript {
     dependencies {
         classpath "net.ltgt.gradle:gradle-apt-plugin:0.5"
         classpath "org.flywaydb:flyway-gradle-plugin:3.2.1"
+        classpath 'org.jooq:jooq-codegen:3.7.1'
+        classpath 'mysql:mysql-connector-java:5.1.36'
     }
 }
 
@@ -45,6 +50,10 @@ dependencies {
     compile 'mysql:mysql-connector-java:5.1.36'
     compile 'net.kr9ly:doubler:0.9.0'
     compile 'com.google.dagger:dagger:2.0.2'
+    compile 'org.apache.shiro:shiro-core:1.2.4'
+    compile 'org.apache.shiro:shiro-ehcache:1.2.4'
+    compile 'org.immutables:value:2.1.4:annotations'
+    apt 'org.immutables:value:2.1.4'
     apt 'net.kr9ly:doubler-compiler:0.9.0'
     apt 'com.google.dagger:dagger-compiler:2.0.2'
 }
@@ -66,4 +75,59 @@ flyway {
             password = ''
             break
     }
+}
+
+task dbCodeGen << {
+    def writer = new StringWriter()
+    def xml = new groovy.xml.MarkupBuilder(writer)
+            .configuration('xmlns': 'http://www.jooq.org/xsd/jooq-codegen-3.7.0.xsd') {
+        jdbc {
+            url('jdbc:mysql://localhost:3306/thinfw')
+            user('root')
+            password('')
+        }
+        generator {
+            database {
+                inputSchema "thinfw"
+
+                customTypes {
+                    customType {
+                        mkp.yieldUnescaped("<name>LocalDateTime</name>")
+                        type "java.time.LocalDateTime"
+                        converter "net.kr9ly.thinfw.converter.LocalDateTimeConverter"
+                    }
+                    customType {
+                        mkp.yieldUnescaped("<name>LocalDate</name>")
+                        type "java.time.LocalDate"
+                        converter "net.kr9ly.thinfw.converter.LocalDateConverter"
+                    }
+                }
+
+                forcedTypes {
+                    forcedType {
+                        mkp.yieldUnescaped("<name>LocalDateTime</name>")
+                        expression ".*"
+                        types "(TIMESTAMP|DATETIME)"
+                    }
+                    forcedType {
+                        mkp.yieldUnescaped("<name>LocalDate</name>")
+                        expression ".*"
+                        types "DATE"
+                    }
+                }
+            }
+            generate() {
+                deprecated false
+                records true
+            }
+            target() {
+                packageName('net.kr9ly.thinfw.db')
+                directory("${projectDir}/src/main/java")
+            }
+        }
+    }
+
+    GenerationTool.generate(
+            JAXB.unmarshal(new StringReader(writer.toString()), org.jooq.util.jaxb.Configuration.class)
+    )
 }

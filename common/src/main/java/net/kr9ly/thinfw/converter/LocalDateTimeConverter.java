@@ -1,11 +1,9 @@
-package net.kr9ly.dagger.module;
+package net.kr9ly.thinfw.converter;
 
-import dagger.Module;
-import dagger.Provides;
-import net.kr9ly.thinfw.dagger.scope.ApplicationScope;
-import org.jooq.SQLDialect;
-import org.jooq.conf.Settings;
-import org.jooq.conf.SettingsTools;
+import org.jooq.Converter;
+
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 /**
  * Copyright 2015 kr9ly
@@ -22,19 +20,25 @@ import org.jooq.conf.SettingsTools;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@Module
-public class DatabaseEnvionmentModule {
+public class LocalDateTimeConverter implements Converter<Timestamp, LocalDateTime> {
 
-    @ApplicationScope
-    @Provides
-    SQLDialect sqlDialect() {
-        return SQLDialect.MARIADB;
+    @Override
+    public LocalDateTime from(Timestamp timestamp) {
+        return timestamp.toLocalDateTime();
     }
 
-    @ApplicationScope
-    @Provides
-    Settings settings() {
-        return new Settings()
-                .withExecuteLogging(true);
+    @Override
+    public Timestamp to(LocalDateTime dateTime) {
+        return Timestamp.valueOf(dateTime);
+    }
+
+    @Override
+    public Class<Timestamp> fromType() {
+        return Timestamp.class;
+    }
+
+    @Override
+    public Class<LocalDateTime> toType() {
+        return LocalDateTime.class;
     }
 }

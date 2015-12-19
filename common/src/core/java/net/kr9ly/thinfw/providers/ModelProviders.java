@@ -1,11 +1,7 @@
-package net.kr9ly.thinfw.dagger.component;
+package net.kr9ly.thinfw.providers;
 
-import dagger.Component;
-import net.kr9ly.thinfw.controller.Session;
-import net.kr9ly.thinfw.dagger.module.*;
+import net.kr9ly.doubler.ProvidersSupport;
 import net.kr9ly.thinfw.dagger.scope.RequestScope;
-import net.kr9ly.thinfw.providers.ModelProvidersModule;
-import net.kr9ly.thinfw.providers.ModelProvidersModuleSupport;
 
 /**
  * Copyright 2015 kr9ly
@@ -23,13 +19,6 @@ import net.kr9ly.thinfw.providers.ModelProvidersModuleSupport;
  * limitations under the License.
  */
 @RequestScope
-@Component(modules = {
-        RequestModule.class,
-        ConnectionModule.class,
-        JooqModule.class,
-        AppSubjectModule.class,
-        SessionIdModule.class,
-        ModelProvidersModule.class
-}, dependencies = {ApplicationComponent.class})
-public interface RequestComponent extends ConnectionModuleSupport, JooqModuleSupport, ModelProvidersModuleSupport {
+@ProvidersSupport
+public @interface ModelProviders {
 }

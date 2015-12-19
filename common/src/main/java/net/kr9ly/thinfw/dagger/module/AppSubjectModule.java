@@ -1,11 +1,14 @@
-package net.kr9ly.dagger.module;
+package net.kr9ly.thinfw.dagger.module;
 
 import dagger.Module;
 import dagger.Provides;
-import net.kr9ly.thinfw.dagger.scope.ApplicationScope;
-import org.jooq.SQLDialect;
-import org.jooq.conf.Settings;
-import org.jooq.conf.SettingsTools;
+import net.kr9ly.thinfw.dagger.scope.RequestScope;
+import net.kr9ly.thinfw.session.SessionIdProvider;
+import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.subject.SimplePrincipalCollection;
+import org.apache.shiro.subject.Subject;
+
+import javax.inject.Named;
 
 /**
  * Copyright 2015 kr9ly
@@ -23,18 +26,15 @@ import org.jooq.conf.SettingsTools;
  * limitations under the License.
  */
 @Module
-public class DatabaseEnvionmentModule {
+public class AppSubjectModule {
 
-    @ApplicationScope
+    @RequestScope
     @Provides
-    SQLDialect sqlDialect() {
-        return SQLDialect.MARIADB;
-    }
-
-    @ApplicationScope
-    @Provides
-    Settings settings() {
-        return new Settings()
-                .withExecuteLogging(true);
+    Subject defaultSubject(SecurityManager securityManager, SessionIdProvider sessionIdProvider) {
+        return new Subject
+                .Builder(securityManager)
+                .sessionId(sessionIdProvider.getSessionId())
+                .sessionCreationEnabled(true)
+                .buildSubject();
     }
 }
