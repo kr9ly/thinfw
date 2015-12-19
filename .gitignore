@@ -1,7 +1,0 @@
-.gradle/
-.idea/
-.vagrant/
-build/
-generated/
-out/
-*.iml
