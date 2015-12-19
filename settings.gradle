@@ -1,0 +1,6 @@
+rootProject.name = 'thinfw'
+
+include 'common'
+include 'tools'
+include 'web'
+
