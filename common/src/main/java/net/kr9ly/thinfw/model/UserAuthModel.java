@@ -10,8 +10,6 @@ import org.apache.shiro.subject.Subject;
 import org.jooq.DSLContext;
 
 import javax.inject.Inject;
-import javax.inject.Named;
-
 import java.io.Serializable;
 
 import static net.kr9ly.thinfw.db.Tables.*;

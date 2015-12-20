@@ -1,28 +1,30 @@
 buildscript {
     repositories {
         jcenter()
-        maven { url "https://plugins.gradle.org/m2/" }
     }
     dependencies {
         classpath 'org.akhikhl.gretty:gretty:+'
-        classpath "net.ltgt.gradle:gradle-apt-plugin:0.5"
     }
 }
 
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'war'
-apply plugin: "net.ltgt.apt"
 apply plugin: 'org.akhikhl.gretty'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
+
+configurations {
+    provided
+}
 
 ext {
     coreSrcDir = file("${projectDir}/src/core/java")
     coreResourcesDir = file("${projectDir}/src/core/resources")
     envSrcDir = file("${projectDir}/src/${buildEnv}/java")
     envResourcesDir = file("${projectDir}/src/${buildEnv}/resources")
+    generatedSourcesDir = file("${projectDir}/generated/main/src")
 }
 
 gretty {
@@ -35,6 +37,7 @@ sourceSets {
         resources.srcDirs += coreResourcesDir
         java.srcDirs += envSrcDir
         resources.srcDirs += envResourcesDir
+        compileClasspath += configurations.provided
     }
 }
 
@@ -43,18 +46,27 @@ repositories {
     maven { url 'http://kr9ly.github.io/maven/' }
 }
 
+compileJava {
+    doFirst {
+        generatedSourcesDir.mkdirs()
+    }
+    options.encoding = 'UTF-8'
+    options.compilerArgs += ['-s', generatedSourcesDir]
+}
+
 dependencies {
     compile project(':common')
     compile project(':conf')
     compile 'com.sparkjava:spark-core:2.3'
     compile 'com.sparkjava:spark-template-pebble:1.0.0'
-    apt 'net.kr9ly:doubler-compiler:0.9.0'
-    apt 'com.google.dagger:dagger-compiler:2.0.2'
+    provided 'net.kr9ly:doubler-compiler:0.9.0'
+    provided 'com.google.dagger:dagger-compiler:2.0.2'
 }
 
 idea {
     module {
-        sourceDirs += file("${projectDir}/generated")
-        generatedSourceDirs += file("${projectDir}/generated")
+        sourceDirs += generatedSourcesDir
+        generatedSourceDirs += generatedSourcesDir
+        scopes.PROVIDED.plus += [configurations.provided]
     }
 }

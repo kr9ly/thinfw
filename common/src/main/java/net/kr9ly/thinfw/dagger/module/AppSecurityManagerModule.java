@@ -2,19 +2,18 @@ package net.kr9ly.thinfw.dagger.module;
 
 import dagger.Module;
 import dagger.Provides;
+import net.kr9ly.thinfw.authentication.realm.LoginRealm;
 import net.kr9ly.thinfw.dagger.scope.ApplicationScope;
 import net.kr9ly.thinfw.shiro.realms.RealmSet;
 import org.apache.shiro.authc.credential.DefaultPasswordService;
 import org.apache.shiro.authc.credential.PasswordMatcher;
-import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.cache.ehcache.EhCacheManager;
-import org.apache.shiro.realm.jdbc.JdbcRealm;
 import org.apache.shiro.session.mgt.DefaultSessionManager;
 import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO;
 import org.apache.shiro.session.mgt.eis.JavaUuidSessionIdGenerator;
-
-import javax.sql.DataSource;
+import org.jooq.SQLDialect;
+import org.jooq.conf.Settings;
 
 /**
  * Copyright 2015 kr9ly
@@ -36,19 +35,19 @@ public class AppSecurityManagerModule {
 
     @ApplicationScope
     @Provides
-    RealmSet realmSet(DataSource dataSource) {
-        DefaultPasswordService passwordService = new DefaultPasswordService();
+    LoginRealm loginRealm(SQLDialect dialect, Settings settings) {
         PasswordMatcher passwordMatcher = new PasswordMatcher();
-        passwordMatcher.setPasswordService(passwordService);
-
-        JdbcRealm realm = new JdbcRealm();
-        realm.setName("default");
-        realm.setAuthenticationQuery("SELECT passwordHash FROM User JOIN UserCredentials ON User.userId = UserCredentials.userId WHERE AuthKey = ?");
+        passwordMatcher.setPasswordService(new DefaultPasswordService());
+        LoginRealm realm = new LoginRealm(dialect, settings);
         realm.setCredentialsMatcher(passwordMatcher);
-        realm.setDataSource(dataSource);
+        return realm;
+    }
 
+    @ApplicationScope
+    @Provides
+    RealmSet realmSet(LoginRealm loginRealm) {
         RealmSet realms = new RealmSet();
-        realms.add(realm);
+        realms.add(loginRealm);
         return realms;
     }
 
