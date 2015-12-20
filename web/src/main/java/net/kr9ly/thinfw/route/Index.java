@@ -1,10 +1,9 @@
-package net.kr9ly.thinfw.dagger.module;
+package net.kr9ly.thinfw.route;
 
-import dagger.Module;
-import dagger.Provides;
-import net.kr9ly.thinfw.dagger.scope.RequestScope;
-import net.kr9ly.thinfw.request.RequestParamProvider;
+import net.kr9ly.thinfw.Di;
+import spark.ModelAndView;
 import spark.Request;
+import spark.Response;
 
 /**
  * Copyright 2015 kr9ly
@@ -21,24 +20,10 @@ import spark.Request;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@Module
-public class RequestModule {
+public class Index {
 
-    private Request request;
-
-    public RequestModule(Request request) {
-        this.request = request;
-    }
-
-    @RequestScope
-    @Provides
-    Request request() {
-        return request;
-    }
-
-    @RequestScope
-    @Provides
-    RequestParamProvider requestParamProvider(Request request) {
-        return new RequestParamProvider(request);
+    public static ModelAndView index(Request request, Response response) {
+        Di.getComponent(request).testController().test();
+        return new ModelAndView(null, "template/index.pebble");
     }
 }

@@ -1,8 +1,8 @@
-package net.kr9ly.thinfw.controller;
+package net.kr9ly.thinfw.form;
 
-import spark.ModelAndView;
-import spark.Request;
-import spark.Response;
+import net.kr9ly.doubler.ProvidedBy;
+import net.kr9ly.thinfw.providers.FormProviders;
+import net.kr9ly.thinfw.request.RequestParamProvider;
 
 /**
  * Copyright 2015 kr9ly
@@ -19,9 +19,13 @@ import spark.Response;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-public class Session {
+@FormProviders
+@ProvidedBy(RequestParamProvider.class)
+public interface TestForm {
 
-    public static ModelAndView login(Request request, Response response) {
-        return null;
-    }
+    String getA();
+
+    int getB();
+
+    boolean getC();
 }

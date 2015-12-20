@@ -1,8 +1,7 @@
-package net.kr9ly.thinfw.controller;
+package net.kr9ly.thinfw.request;
 
-import spark.ModelAndView;
+import net.kr9ly.doubler.CustomProvider;
 import spark.Request;
-import spark.Response;
 
 /**
  * Copyright 2015 kr9ly
@@ -19,9 +18,16 @@ import spark.Response;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-public class Index {
+public class RequestParamProvider implements CustomProvider {
 
-    public static ModelAndView index(Request request, Response response) {
-        return new ModelAndView(null, "template/index.pebble");
+    private Request request;
+
+    public RequestParamProvider(Request request) {
+        this.request = request;
+    }
+
+    @Override
+    public <T> T provide(Class<T> aClass) {
+        return new RequestProxy<>(request, aClass).toProxy();
     }
 }

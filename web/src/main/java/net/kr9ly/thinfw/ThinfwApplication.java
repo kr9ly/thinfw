@@ -1,7 +1,7 @@
 package net.kr9ly.thinfw;
 
-import net.kr9ly.thinfw.controller.Index;
-import net.kr9ly.thinfw.controller.Session;
+import net.kr9ly.thinfw.route.Index;
+import net.kr9ly.thinfw.route.Session;
 import net.kr9ly.thinfw.dagger.component.ApplicationComponent;
 import net.kr9ly.thinfw.dagger.component.DaggerApplicationComponent;
 import net.kr9ly.thinfw.dagger.filter.DependencyFilter;

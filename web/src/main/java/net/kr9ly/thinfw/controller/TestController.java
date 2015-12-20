@@ -1,10 +1,9 @@
-package net.kr9ly.thinfw.dagger.module;
+package net.kr9ly.thinfw.controller;
 
-import dagger.Module;
-import dagger.Provides;
-import net.kr9ly.thinfw.dagger.scope.RequestScope;
-import net.kr9ly.thinfw.request.RequestParamProvider;
-import spark.Request;
+import net.kr9ly.thinfw.form.TestForm;
+import net.kr9ly.thinfw.providers.ControllerProviders;
+
+import javax.inject.Inject;
 
 /**
  * Copyright 2015 kr9ly
@@ -21,24 +20,15 @@ import spark.Request;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@Module
-public class RequestModule {
+@ControllerProviders
+public class TestController {
 
-    private Request request;
+    @Inject
+    TestForm testForm;
 
-    public RequestModule(Request request) {
-        this.request = request;
-    }
-
-    @RequestScope
-    @Provides
-    Request request() {
-        return request;
-    }
-
-    @RequestScope
-    @Provides
-    RequestParamProvider requestParamProvider(Request request) {
-        return new RequestParamProvider(request);
+    public void test() {
+        System.out.println(testForm.getA());
+        System.out.println(testForm.getB());
+        System.out.println(testForm.getC());
     }
 }
