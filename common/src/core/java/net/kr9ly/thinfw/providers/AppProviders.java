@@ -20,5 +20,5 @@ import net.kr9ly.thinfw.dagger.scope.RequestScope;
  */
 @RequestScope
 @ProvidersSupport
-public @interface ModelProviders {
+public @interface AppProviders {
 }

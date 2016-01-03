@@ -2,7 +2,9 @@ package net.kr9ly.thinfw.session;
 
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
-import spark.Request;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Copyright 2015 kr9ly
@@ -21,15 +23,20 @@ import spark.Request;
  */
 public class RequestSessionIdProvider implements SessionIdProvider {
 
-    private Request request;
+    private HttpServletRequest request;
 
-    public RequestSessionIdProvider(Request request) {
+    public RequestSessionIdProvider(HttpServletRequest request) {
         this.request = request;
     }
 
     @Override
     public String getSessionId() {
         Config sessionConf = ConfigFactory.load().getConfig("session");
-        return request.cookie(sessionConf.getString("cookieKey"));
+        for (Cookie cookie : request.getCookies()) {
+            if (cookie.getName().equals(sessionConf.getString("cookieKey"))) {
+                return cookie.getValue();
+            }
+        }
+        return null;
     }
 }

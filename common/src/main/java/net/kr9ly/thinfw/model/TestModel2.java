@@ -1,13 +1,11 @@
-package net.kr9ly.thinfw.database.filter;
+package net.kr9ly.thinfw.model;
 
-import net.kr9ly.thinfw.Di;
-import spark.Request;
-import spark.Response;
+import net.kr9ly.thinfw.providers.AppProviders;
 
-import java.sql.Connection;
+import javax.inject.Inject;
 
 /**
- * Copyright 2015 kr9ly
+ * Copyright 2016 kr9ly
  * <br />
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,9 +19,13 @@ import java.sql.Connection;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-public class DatabaseFilter {
+@AppProviders
+public class TestModel2 {
 
-    public static void close(Request request, Response response) throws Exception {
-        Di.getComponent(request).connection().close();
+    @Inject
+    TestModel model;
+
+    public int test() {
+        return model.test();
     }
 }

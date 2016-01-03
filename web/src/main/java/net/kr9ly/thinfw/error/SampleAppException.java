@@ -1,11 +1,11 @@
-package net.kr9ly.thinfw.form;
+package net.kr9ly.thinfw.error;
 
-import net.kr9ly.doubler.ProvidedBy;
-import net.kr9ly.thinfw.providers.FormProviders;
-import net.kr9ly.thinfw.request.RequestParamProvider;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 /**
- * Copyright 2015 kr9ly
+ * Copyright 2016 kr9ly
  * <br />
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,13 +19,10 @@ import net.kr9ly.thinfw.request.RequestParamProvider;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@FormProviders
-@ProvidedBy(RequestParamProvider.class)
-public interface TestForm {
+public class SampleAppException extends WebApplicationException {
 
-    String getA();
-
-    int getB();
-
-    boolean getC();
+    public SampleAppException(String message) {
+        super(Response.status(Response.Status.BAD_REQUEST)
+                .entity(message).type(MediaType.TEXT_PLAIN).build());
+    }
 }

@@ -3,7 +3,8 @@ package net.kr9ly.thinfw.dagger.component;
 import dagger.Component;
 import net.kr9ly.thinfw.dagger.module.*;
 import net.kr9ly.thinfw.dagger.scope.RequestScope;
-import net.kr9ly.thinfw.providers.*;
+import net.kr9ly.thinfw.providers.AppProvidersModule;
+import net.kr9ly.thinfw.providers.AppProvidersModuleSupport;
 
 /**
  * Copyright 2015 kr9ly
@@ -22,14 +23,11 @@ import net.kr9ly.thinfw.providers.*;
  */
 @RequestScope
 @Component(modules = {
-        RequestModule.class,
         ConnectionModule.class,
         JooqModule.class,
         AppSubjectModule.class,
         SessionIdModule.class,
-        FormProvidersModule.class,
-        ControllerProvidersModule.class,
-        ModelProvidersModule.class
+        AppProvidersModule.class
 }, dependencies = {ApplicationComponent.class})
-public interface RequestComponent extends ConnectionModuleSupport, JooqModuleSupport, ModelProvidersModuleSupport, ControllerProvidersModuleSupport {
+public interface RequestComponent extends ConnectionModuleSupport, JooqModuleSupport, AppProvidersModuleSupport {
 }

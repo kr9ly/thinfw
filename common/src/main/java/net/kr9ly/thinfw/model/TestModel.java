@@ -1,10 +1,11 @@
-package net.kr9ly.thinfw.providers;
+package net.kr9ly.thinfw.model;
 
-import net.kr9ly.doubler.ProvidersSupport;
-import net.kr9ly.thinfw.dagger.scope.RequestScope;
+import net.kr9ly.thinfw.providers.AppProviders;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Copyright 2015 kr9ly
+ * Copyright 2016 kr9ly
  * <br />
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +19,12 @@ import net.kr9ly.thinfw.dagger.scope.RequestScope;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@RequestScope
-@ProvidersSupport
-public @interface ControllerProviders {
+@AppProviders
+public class TestModel {
+
+    private AtomicInteger counter = new AtomicInteger();
+
+    public int test() {
+        return counter.incrementAndGet();
+    }
 }

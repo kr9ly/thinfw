@@ -2,7 +2,7 @@ package net.kr9ly.thinfw.model;
 
 import net.kr9ly.thinfw.entity.db.ImmutableUser;
 import net.kr9ly.thinfw.entity.db.User;
-import net.kr9ly.thinfw.providers.ModelProviders;
+import net.kr9ly.thinfw.providers.AppProviders;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.session.Session;
@@ -29,7 +29,7 @@ import static net.kr9ly.thinfw.db.Tables.*;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@ModelProviders
+@AppProviders
 public class UserAuthModel {
 
     @Inject

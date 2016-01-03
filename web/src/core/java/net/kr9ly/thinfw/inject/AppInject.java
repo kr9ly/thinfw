@@ -1,12 +1,12 @@
-package net.kr9ly.thinfw.controller;
+package net.kr9ly.thinfw.inject;
 
-import net.kr9ly.thinfw.form.TestForm;
-import net.kr9ly.thinfw.providers.ControllerProviders;
-
-import javax.inject.Inject;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * Copyright 2015 kr9ly
+ * Copyright 2016 kr9ly
  * <br />
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,15 +20,7 @@ import javax.inject.Inject;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@ControllerProviders
-public class TestController {
-
-    @Inject
-    TestForm testForm;
-
-    public void test() {
-        System.out.println(testForm.getA());
-        System.out.println(testForm.getB());
-        System.out.println(testForm.getC());
-    }
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.FIELD, ElementType.PARAMETER})
+public @interface AppInject {
 }

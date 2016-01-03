@@ -5,7 +5,8 @@ import dagger.Provides;
 import net.kr9ly.thinfw.dagger.scope.RequestScope;
 import net.kr9ly.thinfw.session.RequestSessionIdProvider;
 import net.kr9ly.thinfw.session.SessionIdProvider;
-import spark.Request;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Copyright 2015 kr9ly
@@ -25,9 +26,15 @@ import spark.Request;
 @Module
 public class SessionIdModule {
 
+    private HttpServletRequest request;
+
+    public SessionIdModule(HttpServletRequest request) {
+        this.request = request;
+    }
+
     @RequestScope
     @Provides
-    SessionIdProvider sessionIdProvider(Request request) {
+    SessionIdProvider sessionIdProvider() {
         return new RequestSessionIdProvider(request);
     }
 }

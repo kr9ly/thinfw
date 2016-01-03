@@ -1,5 +1,6 @@
-{% extends "template/_base.pebble" %}
+{% extends "_base" %}
 {% block title %}title{% endblock %}
 {% block body %}
 <h1>Hello World!!</h1>
+<p>{{ this.foo }}</p>
 {% endblock %}
